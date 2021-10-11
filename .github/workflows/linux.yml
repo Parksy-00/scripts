@@ -24,7 +24,9 @@ jobs:
       - name: Download current snapshot
         run: curl https://github.com/Parksy-00/linux/archive/$(git rev-parse HEAD:linux).zip -o cur_linux.zip
        
-      - run: unzip cur_linux.zip
+      - run: |
+          sudo apt-get install p7zip-full
+          7z x cur_linux.zip
 
       - run: ./install-deps.sh
       - run: ./build-linux.sh cur_linux tinyconfig
