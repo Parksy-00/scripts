@@ -21,11 +21,10 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: Download and unzip current snapshot
-        run: |
-         echo "COMMIT_NUM=$(git rev-parse HEAD:linux)" >> $GITHUB_ENV
-         curl https://github.com/Parksy-00/linux/archive/$(git rev-parse HEAD:linux).zip -o cur_linux.zip
-         unzip cur_linux.zip
+      - name: Download current snapshot
+        run: curl https://github.com/Parksy-00/linux/archive/$(git rev-parse HEAD:linux).zip -o cur_linux.zip
+       
+      - run: unzip cur_linux.zip
 
       - run: ./install-deps.sh
       - run: ./build-linux.sh cur_linux tinyconfig
