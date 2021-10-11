@@ -23,10 +23,10 @@ jobs:
 
       - name: Download and unzip current snapshot
         run: |
-         LINUX_SHA: $(git rev-parse HEAD:linux)
-         echo $LINUX_SHA
-         curl -O https://github.com/Parksy-00/linux/archive/$(LINUX_SHA).zip
-         unzip $(LINUX_SHA).zip
+         echo "COMMIT_NUM=$(git rev-parse HEAD:linux)" >> $GITHUB_ENV
+         echo ${{ env.COMMIT_NUM }}
+         curl -O https://github.com/Parksy-00/linux/archive/${{ env.COMMIT_NUM }}.zip
+         unzip ${{ env.COMMIT_NUM }}.zip
 
       - run: ./install-deps.sh
-      - run: ./build-linux.sh linux-$LINUX_SHA tinyconfig
+      - run: ./build-linux.sh linux-${{ env.COMMIT_NUM }} tinyconfig
