@@ -22,9 +22,8 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Download and unzip current snapshot
-        env: 
-         COMMIT_NUM: $(git rev-parse HEAD:linux)
         run: |
+         COMMIT_NUM: $(git rev-parse HEAD:linux)
          echo $COMMIT_NUM
          curl -O https://github.com/Parksy-00/linux/archive/$(COMMIT_NUM).zip
          unzip $(COMMIT_NUM).zip
