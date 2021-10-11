@@ -24,7 +24,7 @@ jobs:
       - name: Download current snapshot
         run: |
          COMMIT_NUMBER=$(git rev-parse HEAD:linux)
-         wget https://github.com/Parksy-00/linux/archive/$COMMIT_NUMBER.zip
+         curl -O https://github.com/Parksy-00/linux/archive/$COMMIT_NUMBER.zip
          
       - run: unzip $COMMIT_NUMBER.zip
 
