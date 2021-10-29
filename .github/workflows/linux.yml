@@ -1,32 +1,39 @@
 # This is a basic workflow to help you get started with Actions
 
-name: linux
+name: Build
 
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-   paths:
-    - 'linux'
-
+    paths:
+      - linux
+      - 'linux/**'
+      
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
+  # This workflow contains a single job called "build-linux"
+  build-linux:
     # The type of runner that the job will run on
     runs-on: ubuntu-20.04
-
+    
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-
-      - name: Download current snapshot
-        run: curl https://github.com/Parksy-00/linux/archive/$(git rev-parse HEAD:linux).zip -o cur_linux.zip
-       
-      - run: unzip cur_linux.zip
-
-      - run: ./install-deps.sh
-      - run: ./build-linux.sh cur_linux tinyconfig
+        with:
+          submodules: true
+      
+      - name: Download and unzip current snapshot of Linux
+        run: |
+          LINUX_SHA=$(git rev-parse HEAD:linux)
+          curl -L $GITHUB_SERVER_URL/jyoo0515/linux/archive/$LINUX_SHA.zip -o linux.zip && unzip linux.zip
+          echo "LINUX_DIR=linux-$LINUX_SHA" >> $GITHUB_ENV
+    
+      - name: Install dependencies
+        run: ./install-deps.sh
+      
+      - name: Build the unzipped source code
+        run: ./build-linux.sh $LINUX_DIR
